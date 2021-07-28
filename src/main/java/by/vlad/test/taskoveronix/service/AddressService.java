@@ -32,21 +32,18 @@ public class AddressService {
                 null,
                 new ParameterizedTypeReference<List<AddressDto>>() {}
         ).getBody();
-        if (addressDtos != null) {
-            for (AddressDto addressDto : addressDtos) {
-                var latAndLon = new LatAndLon();
+        for (AddressDto addressDto : addressDtos) {
+            var latAndLon = new LatAndLon();
 
-                latAndLon.setLat(addressDto.getLat());
-                latAndLon.setLon(addressDto.getLon());
+            latAndLon.setLat(addressDto.getLat());
+            latAndLon.setLon(addressDto.getLon());
 
-                var coordinates = new Coordinates();
-                coordinates.setLatAndLon(latAndLon);
+            var coordinates = new Coordinates();
+            coordinates.setLatAndLon(latAndLon);
 
-                coordinatesRepository.save(coordinates);
-                return addressDtos;
-            }
+            coordinatesRepository.save(coordinates);
         }
-        return new ArrayList<>();
+        return addressDtos;
     }
 
     public List<AddressDto> getAllAddresses() {
