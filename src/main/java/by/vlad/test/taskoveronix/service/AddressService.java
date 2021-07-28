@@ -1,11 +1,13 @@
 package by.vlad.test.taskoveronix.service;
 
 import by.vlad.test.taskoveronix.dto.AddressDto;
-import by.vlad.test.taskoveronix.model.Address;
 import by.vlad.test.taskoveronix.model.Coordinates;
 import by.vlad.test.taskoveronix.model.LatAndLon;
 import by.vlad.test.taskoveronix.repository.CoordinatesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class AddressService {
@@ -23,6 +24,7 @@ public class AddressService {
     @Autowired
     private CoordinatesRepository coordinatesRepository;
 
+    @Cacheable("getByAddress")
     public List<AddressDto> getByAddress(String requestParams) {
         var addressDtos = restTemplate.exchange(
                 "https://nominatim.openstreetmap.org/search?addressdetails=1&format=json&limit=50&" + requestParams,
